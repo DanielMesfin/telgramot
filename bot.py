@@ -72,13 +72,13 @@ async def start(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton("Contact Us", callback_data="1"),
             ],
             [InlineKeyboardButton(text='Visit our YouTube Channel', url='https://www.youtube.com/@gyeontechnology')],
-            [InlineKeyboardButton("ቲክ ቶክ: ቪዲዮዎቻችንን ይመልከቱ", callback_data="1", url="https://www.tiktok.com/@silemekina?lang=en")],
-            [InlineKeyboardButton("የቴሌግራም ቻናል ይቀላቀሉን", callback_data="3", url="t.me/silemkina")],
-            [InlineKeyboardButton("ዩቲዩብ፡ አሁኑኑ ይመዝገቡ", callback_data="3", url="https://www.youtube.com/@silemekina4126")],
-            [InlineKeyboardButton("የቴሌግራም ቻናል ይቀላቀሉን", callback_data="tobemember")],
+            [InlineKeyboardButton("ቲክ ቶክ: ቪዲዮዎቻችንን ይመልከቱ",  url="https://www.tiktok.com/@silemekina?lang=en")],
+            [InlineKeyboardButton("የቴሌግራም ቻናል ይቀላቀሉን", url="t.me/silemkina")],
+            [InlineKeyboardButton("ዩቲዩብ፡ አሁኑኑ ይመዝገቡ",  url="https://www.youtube.com/@silemekina4126")],
+            [InlineKeyboardButton("አሁኑኑ ይመዝገቡ", callback_data="tobemember")],
             ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    image_path = 'agent.png'
+    image_path = 'images/agent.png'
     caption=f"🎉🎉 ሰላም {user_first_name}፣ እና እንኳን ደህና መጣህ! እዚህ በማግኘታችን በጣም ደስ ብሎናል።\n \n🎉🎉 እየገዙም፣ እየሸጡም፣ወይም እያሰሱም፣ ትክክለኛው ቦታ ላይ ነዎት።\n\n እርዳታ ይፈልጋሉ? ብቻ ይጠይቁ፣ እና የመንገዱን እያንዳንዱን እርምጃ ልንረዳዎ እዚህ መጥተናል።\n\n🎉🎉 ተሞክሮዎን ለስላሳ እና አስደሳች እናድርገው!"
     await update.message.reply_photo(photo=open(image_path, 'rb'), caption=caption)
     await update.message.reply_text(text="Click the button below to visit our social media", reply_markup=reply_markup)

@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import CallbackContext
 from tinydb import TinyDB, Query
 
-db = TinyDB('users.json')
+db = TinyDB('db.json')
 
 def generate_invite_link(user_id):
     return f"https://t.me/free_promotion_agent_bot?start={user_id}"
