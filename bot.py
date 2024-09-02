@@ -1,268 +1,37 @@
-# import logging
-# from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, User # type: ignore
-# from telegram.ext import Application, CallbackQueryHandler, CommandHandler,filters,ConversationHandler,MessageHandler, ContextTypes,CallbackContext,ConversationHandler # type: ignore
-# from tinydb import TinyDB
-# # Enable logging
-# logging.basicConfig(
-#     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-# )
-# # set higher logging level for httpx to avoid all GET and POST requests being logged
-# logging.getLogger("httpx").setLevel(logging.WARNING)
-
-# logger = logging.getLogger(__name__)
-
-# #Alex
-# NAME, COMPANY, AREA, PHONE, EMAIL,LANGUAGE, INVITATION = range(7)
-# translations = {
-#     'en': {
-#         'welcome': "Welcome! Please provide your full name:",
-#         'company': "Please provide the name of your company:",
-#         'area': "Please provide the specific area where your company operates:",
-#         'phone': "Please provide your phone number:",
-#         'email': "Please provide your email address:",
-#         'invitation': "How many people have you invited?",
-#         'thanks': "Thank you for registering!",
-#         'cancel': "Registration canceled.",
-#         'choose_language': "Please choose your language:",
-#         'language_selected': "Language selected: ",
-#     },
-#     'am': {
-#         'welcome': "እንኳን ደህና መጡ! እባኮትን ሙሉ ስምዎን ያስገቡ:",
-#         'company': "የኩባንያዎን ስም እባክዎ ያስገቡ:",
-#         'area': "ኩባንያዎ የሚሰራበትን የተመረጠ አካባቢ እባክዎ ያስገቡ:",
-#         'phone': "እባክዎ የስልክ ቁጥርዎን ያስገቡ:",
-#         'email': "እባክዎ የኢሜል አድራሻዎን ያስገቡ:",
-#         'invitation': "እንድትጋብዙት ስንት ሰዎችን ተጋባብዛለህ?",
-#         'thanks': "እናመሰግናለን ለመመዝገብ!",
-#         'cancel': "መመዝገብ ተሰርቷል.",
-#         'choose_language': "እባኮትን ቋንቋዎን ይምረጡ:",
-#         'language_selected': "ቋንቋ ተመርጧል: ",
-#     }
-# }
-
-
-# db = TinyDB('users.json')
-
-# async def start(update: Update, context: CallbackContext) -> int:
-#     keyboard = [
-#         [
-#             InlineKeyboardButton("English", callback_data="lang_en"),
-#             InlineKeyboardButton("አማርኛ", callback_data="lang_am"),
-#         ]
-#     ]
-#     reply_markup = InlineKeyboardMarkup(keyboard)
-#     await update.message.reply_text(translations['en']['choose_language'], reply_markup=reply_markup)
-#     return LANGUAGE
-
-# async def set_language(update: Update, context: CallbackContext) -> int:
-#     query = update.callback_query
-#     if query.data == "lang_en":
-#         context.user_data['language'] = 'en'
-#     elif query.data == "lang_am":
-#         context.user_data['language'] = 'am'
-
-#     selected_lang = context.user_data['language']
-#     await query.answer()
-#     await query.edit_message_text(translations[selected_lang]['language_selected'] + translations[selected_lang]['choose_language'])
-#     await query.message.reply_text(translations[selected_lang]['welcome'])
-#     return NAME
-
-# # async def name(update: Update, context: CallbackContext) -> int:
-# #     selected_lang = context.user_data['language']
-# #     context.user_data['name'] = update.message.text
-# #     await update.message.reply_text(translations[selected_lang]['company'])
-# #     return COMPANY
-# async def name(update: Update, context: CallbackContext) -> int:
-#     # Set default language if not selected
-#     selected_lang = context.user_data.get('language', 'en')
-#     context.user_data['name'] = update.message.text
-#     await update.message.reply_text(translations[selected_lang]['company'])
-#     return COMPANY
-# async def userInfo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-#     await update.message.reply_text("Welcome! Please provide your full name:")
-#     return NAME
-
-# # async def name(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-# #     context.user_data['name'] = update.message.text
-# #     await update.message.reply_text("Please provide the name of your company:")
-# #     return COMPANY
-
-# async def company(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-#     context.user_data['company'] = update.message.text
-#     await update.message.reply_text("Please provide the specific area where your company operates:")
-#     return AREA
-
-# async def area(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-#     context.user_data['area'] = update.message.text
-#     await update.message.reply_text("Please provide your phone number:")
-#     return PHONE
-
-# async def phone(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-#     context.user_data['phone'] = update.message.text
-#     await update.message.reply_text("Please provide your email address:")
-#     return EMAIL
-
-# async def email(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-#     context.user_data['email'] = update.message.text
-#     await update.message.reply_text("How many people have you invited?")
-#     return INVITATION
-
-# async def invitation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-#     context.user_data['invitation'] = update.message.text
-#     user_data = context.user_data
-
-#     db.insert({
-#         'name': user_data['name'],
-#         'company': user_data['company'],
-#         'area': user_data['area'],
-#         'phone': user_data['phone'],
-#         'email': user_data['email'],
-#         'invitation': user_data['invitation'],
-#     })
-
-#     await update.message.reply_text("Thank you for registering!")
-#     return ConversationHandler.END
-
-# async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-#     await update.message.reply_text("Registration canceled.")
-#     return ConversationHandler.END
-
-# #Ayle
-
-
-# async def start1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-#     """Sends a message with three inline buttons attached."""
-#     keyboard = [
-#         [
-#         InlineKeyboardButton("About Us", callback_data="1"),
-#         InlineKeyboardButton("Help", callback_data="1"),
-#         InlineKeyboardButton("Contact Us", callback_data="1"),
-#         ],
-#         [InlineKeyboardButton("ቲክ ቶክ: ቪዲዮዎቻችንን ይመልከቱ", callback_data="1",url="https://www.tiktok.com/@silemekina?lang=en"),],
-#         [InlineKeyboardButton("የቴሌግራም ቻናል ይቀላቀሉን", callback_data="3",url="t.me/silemkina"),],
-#         [InlineKeyboardButton("ዩቲዩብ፡ አሁኑኑ ይመዝገቡ",callback_data="3",url="https://www.youtube.com/@silemekina4126"),],
-#         [InlineKeyboardButton("የቴሌግራም ቻናል ይቀላቀሉን", callback_data="2"),]
-#     ]
-#     reply_markup = InlineKeyboardMarkup(keyboard)
-#     image_path = '8.jpg'  
-#     caption="አታልም ግን አሁኑኑ አሽከርክር"
-#     await update.message.reply_photo(photo=open(image_path, 'rb'),caption=caption,)
-#     await update.message.reply_text("መኪናዎን ለመግዛት፣ ለመሸጥ ወይም ለመገበያየት ይፈልጋሉ? ከዚህ በላይ ተመልከት! «ስለ መኪና »የሁሉም ነገር አውቶሞቲቭ መድረሻዎ ነው። የህልም መኪናዎን እየፈለጉ፣ ለማሻሻል ዝግጁ ከሆኑ፣ ወይም የአሁኑን ተሽከርካሪዎን ለመሸጥ እየፈለጉ ከሆነ፣ ሽፋን አግኝተናል። በቅርብ ጊዜ ይዘቶቻችን፣ ዜናዎች እና ዝመናዎች እንደተዘመኑ ለመቆየት በማህበራዊ ሚዲያ መድረኮቻችን ላይ ይከተሉን። ማህበረሰባችንን ይቀላቀሉ እና የውይይቱ አካል ይሁኑ",reply_markup=reply_markup)
-
-
-# async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-#     """Parses the CallbackQuery and updates the message text."""
-#     query = update.callback_query
-#     await query.answer()
-#     await query.edit_message_text(text=f"Selected option: {query.data}")
-
-
-# async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-#     """Displays info on how to use the bot."""
-#     await update.message.reply_text("1,Use /start to test this bot.\n "+"2,Use /help for help.\n")
-
-
-# async def invite(update: Update, context: CallbackContext) -> None:
-#     # Generate a unique invite link
-#     bot = context.bot
-#     chat_id = update.effective_chat.id
-
-#     # Generate an invitation link
-#     invite_link = await bot.create_chat_invite_link(chat_id)
-
-#     # Save or update the invite count in the database
-#     user_id = update.effective_user.id
-#     user_data = db.search(User.id == user_id)
-#     if user_data:
-#         db.update({'invites': user_data[0]['invites'] + 1}, User.id == user_id)
-#     else:
-#         db.insert({'id': user_id, 'invites': 1, 'invite_link': invite_link.invite_link})
-
-#     await update.message.reply_text(f"Here is your invitation link: {invite_link.invite_link}")
-
-# async def stats(update: Update, context: CallbackContext) -> None:
-#     user_id = update.effective_user.id
-#     user_data = db.search(User.id == user_id)
-#     if user_data:
-#         invites = user_data[0]['invites']
-#         await update.message.reply_text(f"You have invited {invites} users.")
-#     else:
-#         await update.message.reply_text("You have not invited anyone yet.")
-
-
-# async def handle_button_click(update: Update, context: CallbackContext) -> None:
-#     """Handle the action when an inline keyboard button is pressed."""
-#     query = update.callback_query
-#     callback_data = query.data
-
-#     # Process the callback_data
-#     if callback_data == "1":
-#         await query.answer()
-#         await query.message.reply_text("About Us: This is the about us section.")
-#     elif callback_data == "2":
-#         await query.answer()
-#         await query.message.reply_text("Contact Us: This is the contact us section.")
-#     else:
-#         await query.answer()
-#         await query.message.reply_text("Unknown option selected.")
-
-
-# def main() -> None:
-#     application = Application.builder().token("7383343556:AAFGF8Zql6ClD3ssZv7gUd7EaGrvz5HP34s").build()
-#     application.add_handler(CommandHandler("start", start))
-#     application.add_handler(CommandHandler("help", help_command))
-#     application.add_handler(CommandHandler("invite", invite))
-#     application.add_handler(CallbackQueryHandler(button))
-#     application.add_handler(CallbackQueryHandler(handle_button_click))
-#     #
-#     application.add_handler(CallbackQueryHandler(set_language, pattern="^lang_.*"))
-#     conv_handler = ConversationHandler(
-#         entry_points=[CommandHandler("userInfo", userInfo)],
-#         states={
-#             LANGUAGE: [CallbackQueryHandler(set_language)],
-#             NAME: [MessageHandler(filters.TEXT & ~filters.COMMAND, name)],
-#             COMPANY: [MessageHandler(filters.TEXT & ~filters.COMMAND, company)],
-#             AREA: [MessageHandler(filters.TEXT & ~filters.COMMAND, area)],
-#             PHONE: [MessageHandler(filters.TEXT & ~filters.COMMAND, phone)],
-#             EMAIL: [MessageHandler(filters.TEXT & ~filters.COMMAND, email)],
-#             INVITATION: [MessageHandler(filters.TEXT & ~filters.COMMAND, invitation)],
-#         },
-#         fallbacks=[CommandHandler('cancel', cancel)],
-#         per_message=True
-#     )
-#     application.add_handler(conv_handler)
-#     application.run_polling(allowed_updates=Update.ALL_TYPES)
-# if __name__ == "__main__":
-#     main()
 import logging
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update 
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from invitation import invite_friends,invite_friends_count
+from telegram import Bot
+from tinydb import TinyDB,Query
 from telegram.ext import (
-    Application, 
-    CallbackQueryHandler, 
-    CommandHandler, 
-    ConversationHandler, 
-    MessageHandler, 
-    ContextTypes, 
-    CallbackContext, 
-    filters 
-) # type: ignore
-from tinydb import TinyDB
-
-# Enable logging
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", 
-    level=logging.INFO
+    Application,
+    CallbackQueryHandler,
+    CommandHandler,
+    ConversationHandler,
+    MessageHandler,
+    ContextTypes,
+    CallbackContext,
+    filters
 )
 
+# db = TinyDB('users.json')
+STAKEHOLDER_TELEGRAM_ID = '979896547'
+TELEGRAM_TOKEN='7182870026:AAH8fZXuOGXEAI6UF-Iecoz60PkgidOmZPs'
+bot = Bot(token=TELEGRAM_TOKEN)
+db = TinyDB('db.json')
+users_table = db.table('users')
+# In-memory invite links for simplicity. In production, store them in the database.
+invite_links = {}
+# Enable logging
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO
+)
 # Set higher logging level for httpx to avoid all GET and POST requests being logged
 logging.getLogger("httpx").setLevel(logging.WARNING)
-
 logger = logging.getLogger(__name__)
-
 # Conversation states
-NAME, COMPANY, AREA, PHONE, EMAIL, LANGUAGE, INVITATION,TASK, = range(8)
-
+NAME, COMPANY, AREA, PHONE, EMAIL, LANGUAGE,TOBEMEMBER, INVITATION,TASK, = range(9)
 # Translations dictionary
 translations = {
     'en': {
@@ -276,6 +45,8 @@ translations = {
         'cancel': "Registration canceled.",
         'choose_language': "Please choose your language:",
         'language_selected': "Language selected: ",
+        'task':"Complete your tasks, contribute to our community, and start earning money today! Together, we can grow stronger while you achieve your financial goals."
+
     },
     'am': {
         'welcome': "እንኳን ደህና መጡ! እባኮትን ሙሉ ስምዎን ያስገቡ:",
@@ -287,15 +58,34 @@ translations = {
         'thanks': "እናመሰግናለን ለመመዝገብ!",
         'cancel': "መመዝገብ ተሰርቷል.",
         'choose_language': "እባኮትን ቋንቋዎን ይምረጡ:",
+         'task': "ተግባሮችዎን ያጠናቅቁ ፣ ለማህበረሰባችን ያዋጡ እና ዛሬ ገንዘብ ማግኘት ይጀምሩ! አንድ ላይ፣ የፋይናንስ ግቦችዎን በሚያሳኩበት ጊዜ የበለጠ ጠንካራ ማደግ እንችላለን።",
         'language_selected': "ቋንቋ ተመርጧል: ",
     }
 }
 
-# Initialize TinyDB
-db = TinyDB('users.json')
-
-# Command handlers
 async def start(update: Update, context: CallbackContext) -> int:
+    user_first_name = update.message.from_user.first_name
+    keyboard = [
+        [
+            InlineKeyboardButton("About Us", callback_data="1"),
+            InlineKeyboardButton("Help", callback_data="1"),
+            InlineKeyboardButton("Contact Us", callback_data="1"),
+            ],
+            [InlineKeyboardButton(text='Visit our YouTube Channel', url='https://www.youtube.com/@gyeontechnology')],
+            [InlineKeyboardButton("ቲክ ቶክ: ቪዲዮዎቻችንን ይመልከቱ", callback_data="1", url="https://www.tiktok.com/@silemekina?lang=en")],
+            [InlineKeyboardButton("የቴሌግራም ቻናል ይቀላቀሉን", callback_data="3", url="t.me/silemkina")],
+            [InlineKeyboardButton("ዩቲዩብ፡ አሁኑኑ ይመዝገቡ", callback_data="3", url="https://www.youtube.com/@silemekina4126")],
+            [InlineKeyboardButton("የቴሌግራም ቻናል ይቀላቀሉን", callback_data="tobemember")],
+            ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    image_path = 'agent.png'
+    caption=f"🎉🎉 ሰላም {user_first_name}፣ እና እንኳን ደህና መጣህ! እዚህ በማግኘታችን በጣም ደስ ብሎናል።\n \n🎉🎉 እየገዙም፣ እየሸጡም፣ወይም እያሰሱም፣ ትክክለኛው ቦታ ላይ ነዎት።\n\n እርዳታ ይፈልጋሉ? ብቻ ይጠይቁ፣ እና የመንገዱን እያንዳንዱን እርምጃ ልንረዳዎ እዚህ መጥተናል።\n\n🎉🎉 ተሞክሮዎን ለስላሳ እና አስደሳች እናድርገው!"
+    await update.message.reply_photo(photo=open(image_path, 'rb'), caption=caption)
+    await update.message.reply_text(text="Click the button below to visit our social media", reply_markup=reply_markup)
+    return TOBEMEMBER
+async def to_be_member(update: Update, context: CallbackContext) -> int:
+    user_first_name = update.message.from_user.first_name
+    text=f"🎉🎉 ሰላም {user_first_name}፣ እና እንኳን ደህና መጣህ! እዚህ በማግኘታችን በጣም ደስ ብሎናል። እየገዙም፣ እየሸጡም፣ ወይም እያሰሱም፣ ትክክለኛው ቦታ ላይ ነዎት። እርዳታ ይፈልጋሉ? ብቻ ይጠይቁ፣ እና የመንገዱን እያንዳንዱን እርምጃ ልንረዳዎ እዚህ መጥተናል። ተሞክሮዎን ለስላሳ እና አስደሳች እናድርገው!"
     keyboard = [
         [
             InlineKeyboardButton("English", callback_data="lang_en"),
@@ -303,23 +93,23 @@ async def start(update: Update, context: CallbackContext) -> int:
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text(translations['en']['choose_language'], reply_markup=reply_markup)
+    await update.message.reply_text(text, reply_markup=reply_markup)
     return LANGUAGE
 
 async def set_language(update: Update, context: CallbackContext) -> int:
     query = update.callback_query
     selected_lang = 'en'
     lang="English"
-    
+
     if query.data == "lang_en":
         selected_lang = 'en'
         lang="English"
     elif query.data == "lang_am":
         selected_lang = 'am'
         lang="አማርኛ"
-    
+
     context.user_data['language'] = selected_lang
-    
+
     await query.answer()
     await query.edit_message_text(translations[selected_lang]['language_selected'] + lang)
     await query.message.reply_text(translations[selected_lang]['welcome'])
@@ -348,14 +138,14 @@ async def phone(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     selected_lang = context.user_data['language']
     await update.message.reply_text(translations[selected_lang]['email'])
     return EMAIL
-
+# email
 async def email(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     context.user_data['email'] = update.message.text
     selected_lang = context.user_data['language']
     await update.message.reply_text(translations[selected_lang]['invitation'])
     return INVITATION
-
-async def invitation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+# user registrations
+async def register(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     context.user_data['invitation'] = update.message.text
     user_data = context.user_data
 
@@ -378,14 +168,13 @@ async def invitation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         ],
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text("Choose an option:", reply_markup=reply_markup)
+    await update.message.reply_text(translations[selected_lang]['thanks'], reply_markup=reply_markup)
     return TASK
-    
-#post yout post
-async def send_image_with_message():
+# postin mensage
+async def post_image_with_message():
     channel_id = '@yourchannelusername'
     caption_text = "Check out our latest update!"
-    image_url = 'https://example.com/path/to/your/image.jpg'
+    image_url = '8.png'
     keyboard = [
         [
             InlineKeyboardButton("👍 Like", callback_data='like'),
@@ -393,86 +182,159 @@ async def send_image_with_message():
             InlineKeyboardButton("🔗 Share", callback_data='dislike'),
         ],
     ]
-
+    message_text="these is the product "
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     # Send the message to the channel with inline buttons
     bot.send_message(chat_id=channel_id, text=message_text, photo=image_url, caption=caption_text,reply_markup=reply_markup)
-
-    
-    # bot.send_photo(chat_id=channel_id, photo=image_url, caption=caption_text)
-
+# cancel options
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     selected_lang = context.user_data.get('language', 'en')
     await update.message.reply_text(translations[selected_lang]['cancel'])
     return ConversationHandler.END
-
-# Inline keyboard buttons and handlers
-async def start1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    keyboard = [
-        [
-            InlineKeyboardButton("About Us", callback_data="1"),
-            InlineKeyboardButton("Help", callback_data="1"),
-            InlineKeyboardButton("Contact Us", callback_data="1"),
-        ],
-        [InlineKeyboardButton("ቲክ ቶክ: ቪዲዮዎቻችንን ይመልከቱ", callback_data="1", url="https://www.tiktok.com/@silemekina?lang=en")],
-        [InlineKeyboardButton("የቴሌግራም ቻናል ይቀላቀሉን", callback_data="3", url="t.me/silemkina")],
-        [InlineKeyboardButton("ዩቲዩብ፡ አሁኑኑ ይመዝገቡ", callback_data="3", url="https://www.youtube.com/@silemekina4126")],
-        [InlineKeyboardButton("የቴሌግራም ቻናል ይቀላቀሉን", callback_data="2")],
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    image_path = '8.png'
-    caption = "አታልም ግን አሁኑኑ አሽከርክር"
-    await update.message.reply_photo(photo=open(image_path, 'rb'), caption=caption)
-    await update.message.reply_text(
-        "መኪናዎን ለመግዛት፣ ለመሸጥ ወይም ለመገበያየት ይፈልጋሉ? ከዚህ በላይ ተመልከት! "
-        "«ስለ መኪና »የሁሉም ነገር አውቶሞቲቭ መድረሻዎ ነው። የህልም መኪናዎን እየፈለጉ፣ ለማሻሻል ዝግጁ ከሆኑ ወይም ይቅርታ ይፈልጋሉ ፣ እኛ ማንም ይለካል።"
-        " አሁንም ያጋቡን!",
-        reply_markup=reply_markup
-    )
-
+# Task managment for the system
 async def do_task(update: Update, context: CallbackContext) -> int:
     query = update.callback_query
     task = 'support'
-    
+
     if query.data == "support":
         task = 'support'
     elif query.data == "post":
         task = 'post'
 
-    # do your logic here
-    # context.user_data['language'] = task
-    
     await query.answer()
     # await query.edit_message_text(translations[selected_lang]['task'] + task)
     await query.edit_message_text(task)
-
-    await query.message.reply_text(translations[selected_lang]['welcome'])
+    # await query.message.reply_text(translations[selected_lang]['welcome'])
     return ConversationHandler.END
-    # return NAME
-def main() -> None:
-    application = Application.builder().token("7182870026:AAH8fZXuOGXEAI6UF-Iecoz60PkgidOmZPs").build()
+# Function to fetch and forward user data
+async def forward_user_data(update: Update, context: ContextTypes.DEFAULT_TYPE)->int:
+    telegram_id = str(update.message.from_user.id)
+    User = Query()
+    users = db.all()
+    if users:
+        user_info = f"All User Information:\n\n"
+        for user in users:
+            user_info += "------------------\n"
+            for key, value in user.items():
+                user_info += f"{key}: {value}\n"
+            user_info += "------------------\n"
+        # Send the formatted data to the stakeholder
+        await bot.send_message(chat_id='979896547', text=user_info)
+    else:
+        await bot.send_message(chat_id='979896547', text="User not found.")
 
+
+# Function to add a new user to the database
+def add_user(user_id, username, parent_id=None):
+    if not users_table.contains(Query().user_id == user_id):
+        users_table.insert({
+            'user_id': user_id,
+            'username': username,
+            'parent_id': parent_id,
+            'invites': 0,
+            'transactions': []
+        })
+
+# Start command to welcome the user
+async def start12(update: Update, context: CallbackContext) -> None:
+    user_id = update.message.from_user.id
+    username = update.message.from_user.username
+
+    # Check if user already exists and add if not
+    if not users_table.contains(Query().user_id == user_id):
+        add_user(user_id, username)
+
+    await update.message.reply_text(
+        f"Welcome {username}! Use /invite12 to generate an invitation link."
+    )
+
+# Generate an invitation link for the user
+async def invite12(update: Update, context: CallbackContext) -> None:
+    bot = Bot(token=TELEGRAM_TOKEN)
+    updates = bot.get_updates()
+    # print("chanl id")
+    # print(updates.message.chat.id)
+    # for update in updates:
+    #     print("chanl id")
+    #     print(update.message.chat.id)
+    user_id = update.message.from_user.id
+    chat_id = "@free_promotion_agent_bot"# Replace with your public group/channel ID
+    bot = context.bot
+
+    # Ensure the user has initiated with /start
+    if not users_table.contains(Query().user_id == user_id):
+        await update.message.reply_text("Please use /start first.")
+        return
+
+    # Generate a one-time use invite link
+    invite_link = await bot.create_chat_invite_link(chat_id=chat_id, member_limit=1)
+    invite_links[invite_link.invite_link] = user_id  # Store the creator of the invite link
+
+    await update.message.reply_text(f"Here is your invite link: {invite_link.invite_link}")
+
+# Handle new members joining through invite links
+async def new_member(update: Update, context: CallbackContext) -> None:
+    for member in update.message.new_chat_members:
+        invite_link = update.message.text  # Assuming this contains the invite link
+
+        if invite_link in invite_links:
+            parent_id = invite_links[invite_link]
+            user_id = member.id
+            username = member.username
+
+            # Add the new user with the inviter's ID as parent_id
+            add_user(user_id, username, parent_id)
+
+            # Increment the inviter's invite count
+            users_table.update({'invites': Query().invites + 1}, Query().user_id == parent_id)
+
+            await update.message.reply_text(
+                f"{member.username} has joined using your invite link! Total invites: {users_table.get(Query().user_id == parent_id)['invites']}"
+            )
+
+# Fetch children (invited users) for a specific parent
+async def children(update: Update, context: CallbackContext) -> None:
+    parent_id = update.message.from_user.id
+    children = users_table.search(Query().parent_id == parent_id)
     
+    if children:
+        response = "Here are your invited users:\n"
+        response += "\n".join([f"Username: {child['username']}" for child in children])
+    else:
+        response = "You haven't invited anyone yet."
+
+    await update.message.reply_text(response)
+
+def main() -> None:
+    
+    application = Application.builder().token("7182870026:AAH8fZXuOGXEAI6UF-Iecoz60PkgidOmZPs").build()
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler("start", start)],
         states={
+            TOBEMEMBER: [CallbackQueryHandler(set_language)],
             LANGUAGE: [CallbackQueryHandler(set_language)],
             NAME: [MessageHandler(filters.TEXT & ~filters.COMMAND, name)],
             COMPANY: [MessageHandler(filters.TEXT & ~filters.COMMAND, company)],
             AREA: [MessageHandler(filters.TEXT & ~filters.COMMAND, area)],
             PHONE: [MessageHandler(filters.TEXT & ~filters.COMMAND, phone)],
             EMAIL: [MessageHandler(filters.TEXT & ~filters.COMMAND, email)],
-            INVITATION: [MessageHandler(filters.TEXT & ~filters.COMMAND, invitation)],
+            INVITATION: [MessageHandler(filters.TEXT & ~filters.COMMAND, register)],
             TASK: [CallbackQueryHandler(do_task)],
         },
         fallbacks=[CommandHandler("cancel", cancel)],
         per_message=False
     )
     application.add_handler(conv_handler)
-    application.add_handler(CommandHandler("start1", start1))
     application.add_handler(CommandHandler("invite", invite_friends))
-    application.add_handler(CommandHandler("count", invite_friends))
+    application.add_handler(CommandHandler("start12", start12))
+
+    application.add_handler(CommandHandler("invite12", invite12))
+    application.add_handler(CommandHandler("user", forward_user_data))
+    application.add_handler(CommandHandler("post", post_image_with_message ))
+    application.add_handler(CommandHandler("user", forward_user_data))
+    # application.add_handler(CommandHandler("new", invite_new_user))
+
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == "__main__":
